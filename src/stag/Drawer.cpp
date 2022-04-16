@@ -127,9 +127,26 @@ cv::Mat Drawer::drawMarkers(const string& path, Mat image,
   // cv::cvtColor(greyMat, bgrMat, CV_GRAY2BGR);
   cv::cvtColor(greyMat, bgrMat, cv::COLOR_GRAY2BGR);
 
+  static int width = greyMat.size().width; //1280
+  static int height = greyMat.size().height; //720
+
+  static const int shiftx = 300/2;
+  static const int shifty = 265/2;
+
+  cv::line(bgrMat, cv::Point(width/2, height/2 - shifty),
+              cv::Point(width/2, height/2 + shifty),
+              cv::Scalar(255, 255, 0), 2, cv::LINE_AA);
+  cv::line(bgrMat, cv::Point(width/2 - shiftx, height/2),
+              cv::Point(width/2 + shiftx, height/2),
+              cv::Scalar(255, 255, 0), 2, cv::LINE_AA);
+
+  cv::rectangle(bgrMat, cv::Point(width/2 - shiftx, height/2 - shifty), cv::Point(width/2 + shiftx, height/2 + shifty), cv::Scalar(255, 0, 255), 3, cv::LINE_AA);
+
   for (int i = 0; i < markers.size(); i++) {
     vector<Point2d> corners = markers[i].corners;
     Point2d center = markers[i].center;
+
+    cv::arrowedLine(bgrMat, cv::Point(center.x, center.y), cv::Point(width/2, height/2), cv::Scalar(0, 255, 255), 4, cv::LINE_AA);
 
     cv::circle(bgrMat, cv::Point(corners[0].x, corners[0].y), 6,
                cv::Scalar(255, 255, 255), -1, cv::LINE_AA);
